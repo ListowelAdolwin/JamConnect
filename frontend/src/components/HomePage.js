@@ -97,7 +97,7 @@ export default function HomePage() {
   const [roomCode, setRoomCode] = useState(null);
 
   useEffect(() => {
-    fetch("api/user-in-room/")
+    fetch("/api/user-in-room")
       .then((response) => response.json())
       .then((data) => {
         setRoomCode(data.code);
@@ -110,11 +110,8 @@ export default function HomePage() {
 
   const renderHomePage = () => {
     if (roomCode) {
-      console.log("juuju")
-      console.log(roomCode);
-      return <Navigate to={`room/${roomCode}/`} replace={true} />;
+      return <Navigate to={`/room/${roomCode}`} replace={true} />;
     } else {
-      console.log("zomme")
       return (
         <Grid container spacing={3}>
           <Grid item xs={12} align="center">
@@ -124,10 +121,10 @@ export default function HomePage() {
           </Grid>
           <Grid item xs={12} align="center">
             <ButtonGroup disableElevation variant="contained" color="primary">
-              <Button color="primary" to="join/" component={Link}>
+              <Button color="primary" to="/join" component={Link}>
                 Join a Room
               </Button>
-              <Button color="secondary" to="create/" component={Link}>
+              <Button color="secondary" to="/create" component={Link}>
                 Create a Room
               </Button>
             </ButtonGroup>
@@ -142,10 +139,10 @@ export default function HomePage() {
       <Router>
         <Routes>
           <Route path="/" element={renderHomePage()} />
-          <Route path="join/" element={<RoomJoinPage />} />
-          <Route path="create/" element={<CreateRoomPage />} />
+          <Route path="/join" element={<RoomJoinPage />} />
+          <Route path="/create" element={<CreateRoomPage />} />
           <Route
-            path="room/:roomCode/"
+            path="/room/:roomCode"
             element={<Room clearRoomCodeCallback={clearRoomCode} />}
           />
         </Routes>

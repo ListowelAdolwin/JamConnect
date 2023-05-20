@@ -41,7 +41,7 @@ class RoomJoinPage extends Component {
         code: this.state.roomCode,
       }),
     };
-    fetch("/api/join-room/", requestOptions)
+    fetch("/api/join-room", requestOptions)
       .then((response) => {
         if (response.ok) {
           this.props.navigate(`/room/${this.state.roomCode}`);
