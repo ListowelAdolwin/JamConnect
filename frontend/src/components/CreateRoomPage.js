@@ -34,7 +34,7 @@ export default function CreateRoomPage() {
       }),
     };
 
-    fetch("/api/create-room/", requestOptions)
+    fetch("/api/create-room", requestOptions)
       .then((response) => response.json())
       .then((data) => navigate("/room/" + data.code));
   };

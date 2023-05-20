@@ -2,7 +2,8 @@ import React, { Component, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Grid, Button, Typography } from "@material-ui/core";
 
-export default function Room() {   const navigate = useNavigate();
+export default function Room(props) {
+  const navigate = useNavigate();
   const { roomCode } = useParams();
   const [votesToSkip, setVotesToSkip] = useState(2);
   const [guestCanPause, setGuestCanPause] = useState(false);
@@ -14,8 +15,15 @@ export default function Room() {   const navigate = useNavigate();
 
   const getRoomDetails = () => {
     fetch("/api/get-room?code=" + roomCode)
-      .then((response) => response.json())
+      .then((response) => {
+        console.log(response)
+        if (!response.ok) {
+          props.clearRoomCodeCallback();
+          navigate("/");
+        } else return response.json();
+      })
       .then((data) => {
+        console.log(data)
         setVotesToSkip(data.votes_to_skip);
         setGuestCanPause(data.guest_can_pause);
         setIsHost(data.is_host);
@@ -29,11 +37,12 @@ export default function Room() {   const navigate = useNavigate();
     const requestOptions = {
       method: "POST",
       headers: {
-        "Content-Type": "applicationi/json",
+        "Content-Type": "application/json",
       },
     };
-    fetch("api/leave-room/", requestOptions).then((_response) => {
-      navigate('/');
+    fetch("/api/leave-room", requestOptions).then((_response) => {
+      props.clearRoomCodeCallback();
+      navigate("/");
     });
   };
 
