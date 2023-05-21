@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework import generics, status
 from .models import Room
-from .serializers import RoomSerializer, CreateRoomSerializer
+from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import JsonResponse
@@ -52,6 +52,9 @@ class CreateRoomView(APIView):
             else:
                 room = Room(votes_to_skip=votes_to_skip, guest_can_pause=guest_can_pause, host=host)
                 self.request.session['room_code'] = room.code
+                print(room.code)
+                print(guest_can_pause)
+                print(votes_to_skip)
                 room.save()
             return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
 
@@ -83,13 +86,33 @@ class CheckUserInRoom(APIView):
 
 class LeaveRoom(APIView):
     def post(self, request, format=None):
-        print(request)
         if 'room_code' in self.request.session:
             code = self.request.session.pop('room_code')
-            print(code)
             user_key = self.request.session.session_key
             user_room = Room.objects.filter(host=user_key)
             if len(user_room) > 0:
                 user_room = user_room[0]
                 user_room.delete()
         return Response({'Message': 'Delete Successful'}, status=status.HTTP_200_OK)
+
+class UpdateRoom(APIView):
+    serializer_class = UpdateRoomSerializer
+
+    def patch(self, request, format=None):
+        serializer = self.serializer_class(data=self.request.data)
+        if serializer.is_valid():
+            votes_to_skip = serializer.data.get('votes_to_skip')
+            guest_can_pause = serializer.data.get('guest_can_pause')
+            code = serializer.data.get('code')
+        room = Room.objects.filter(code=code)
+        if room.exists():
+            room = room[0]
+            user_id = request.session.session_key
+            if user_id != room.host:
+                return Response({"MSG":"Only host can change settings"}, status=status.HTTP_403_FORBIDDEN)
+            room.votes_to_skip = votes_to_skip
+            room.guest_can_pause = guest_can_pause
+            room.save(update_fields=['votes_to_skip', 'guest_can_pause'])
+            return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+        else:
+            return Response({"MSG":"Room doesn't exist"}, status=status.HTTP_404_NOT_FOUND)
