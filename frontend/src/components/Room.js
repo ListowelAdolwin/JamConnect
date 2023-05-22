@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Grid, Button, Typography } from "@material-ui/core";
 import CreateRoomPage from "./CreateRoomPage";
+import MusicPlayer from "./MusicPlayer";
 
 export default function Room(props) {
   const navigate = useNavigate();
@@ -11,16 +12,26 @@ export default function Room(props) {
   const [isHost, setIsHost] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [spotifyAuthenticated, setSpotifyAuthenticated] = useState(false);
+  const [song, setSong] = useState({});
 
   useEffect(() => {
     getRoomDetails();
+  }, []);
+
+  useEffect(() => {
+    // Runs once when the component mounts
+    const interval = setInterval(getCurrentSong, 3000);
+
+    // Clean-up function for unmounting
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   const getRoomDetails = () => {
     return fetch("/api/get-room?code=" + roomCode)
       .then((response) => {
         if (!response.ok) {
-          console.log(props.clearRoomCodeCallback);
           props.clearRoomCodeCallback(); //HEre
           navigate("/");
         } else return response.json();
@@ -30,7 +41,6 @@ export default function Room(props) {
         setGuestCanPause(data.guest_can_pause);
         setIsHost(data.is_host);
         if (data.is_host) {
-          console.log("Checking if Host");
           authenticateSpotify();
         } else {
           console.log("Not Host");
@@ -72,6 +82,24 @@ export default function Room(props) {
 
   const updateShowSettings = (value) => {
     setShowSettings(value);
+  };
+
+  const getCurrentSong = () => {
+    fetch("/spotify/current-song")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSong(data);
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error("Error retrieving current song:", error);
+        setSong({}); // Set a default value for the song
+      });
   };
 
   const renderSettings = () => {
@@ -123,21 +151,7 @@ export default function Room(props) {
             Code: {roomCode}
           </Typography>
         </Grid>
-        <Grid item xs={12} align="center">
-          <Typography variant="h6" component="h6">
-            Votes: {votesToSkip}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} align="center">
-          <Typography variant="h6" component="h6">
-            Guest Can Pause: {guestCanPause.toString()}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} align="center">
-          <Typography variant="h6" component="h6">
-            Host: {isHost.toString()}
-          </Typography>
-        </Grid>
+        <MusicPlayer {...song} />
         {isHost ? renderSettingsButton() : null}
         <Grid item xs={12} align="center">
           <Button
