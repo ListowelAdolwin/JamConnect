@@ -190,3 +190,7 @@ export default function CreateRoomPage({
     </Grid>
   );
 }
+
+
+/* https://developer.spotify.com/dashboard/9e5abc320ddd4347b92a884bbad23836
+ */

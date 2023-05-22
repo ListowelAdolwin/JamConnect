@@ -10,16 +10,18 @@ export default function Room(props) {
   const [guestCanPause, setGuestCanPause] = useState(false);
   const [isHost, setIsHost] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [spotifyAuthenticated, setSpotifyAuthenticated] = useState(false);
 
   useEffect(() => {
     getRoomDetails();
   }, []);
 
   const getRoomDetails = () => {
-    fetch("/api/get-room?code=" + roomCode)
+    return fetch("/api/get-room?code=" + roomCode)
       .then((response) => {
         if (!response.ok) {
-          props.clearRoomCodeCallback();
+          console.log(props.clearRoomCodeCallback);
+          props.clearRoomCodeCallback(); //HEre
           navigate("/");
         } else return response.json();
       })
@@ -27,9 +29,31 @@ export default function Room(props) {
         setVotesToSkip(data.votes_to_skip);
         setGuestCanPause(data.guest_can_pause);
         setIsHost(data.is_host);
+        if (data.is_host) {
+          console.log("Checking if Host");
+          authenticateSpotify();
+        } else {
+          console.log("Not Host");
+        }
       })
       .catch((error) => {
         console.error("Error retrieving room details:", error);
+      });
+  };
+
+  const authenticateSpotify = () => {
+    fetch("/spotify/is-authenticated")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setSpotifyAuthenticated(data.status);
+        if (!data.status) {
+          fetch("/spotify/get-auth-url")
+            .then((response) => response.json())
+            .then((data) => {
+              window.location.replace(data.url);
+            });
+        }
       });
   };
 
