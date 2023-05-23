@@ -20,7 +20,7 @@ export default function Room(props) {
 
   useEffect(() => {
     // Runs once when the component mounts
-    const interval = setInterval(getCurrentSong, 3000);
+    const interval = setInterval(getCurrentSong, 1000);
 
     // Clean-up function for unmounting
     return () => {
@@ -102,7 +102,6 @@ export default function Room(props) {
       });
   };
 
- 
   const renderSettings = () => {
     return (
       <Grid container spacing={1}>
