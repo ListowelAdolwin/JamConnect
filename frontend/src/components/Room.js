@@ -102,6 +102,7 @@ export default function Room(props) {
       });
   };
 
+ 
   const renderSettings = () => {
     return (
       <Grid container spacing={1}>

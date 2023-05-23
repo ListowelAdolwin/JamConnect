@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from requests import Request, post
 from .credentials import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
-from .utils import update_or_create_user_tokens, is_spotify_authenticated, execute_spotify_api_request
+from .utils import update_or_create_user_tokens, is_spotify_authenticated, execute_spotify_api_request, play_song, pause_song
 from api.models import Room
 
 # Create your views here
@@ -55,7 +55,6 @@ class IsAuthenticated(APIView):
         print("IsAuthenticated Visited!")
         is_authenticated = is_spotify_authenticated(
             self.request.session.session_key)
-        print(is_authenticated)
 
         return Response({'status': is_authenticated}, status=status.HTTP_200_OK)
 
@@ -101,3 +100,25 @@ class CurrentSong(APIView):
         }
 
         return Response(song, status=status.HTTP_200_OK)
+
+
+class PlaySong(APIView):
+    def put(self, response, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code)[0]
+
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            play_song(room.host)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+
+class PauseSong(APIView):
+    def put(self, response, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.get(code=room_code)
+
+        if self.request.session.session_key == room.host or room.guest_can_pause:
+            pause_song(room.host)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_403_FORBIDDEN)

@@ -8,7 +8,6 @@ from rest_framework.response import Response
 from django.http import JsonResponse
 
 
-# Create your views here.
 class RoomView(generics.ListAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
@@ -19,7 +18,6 @@ class GetRoom(APIView):
 
     def get(self, request, format=None):
         code = request.GET.get(self.lookup_url_kwarg)
-        print(code)
         if code:
             room = Room.objects.filter(code=code)
             if len(room) > 0:
@@ -52,9 +50,6 @@ class CreateRoomView(APIView):
             else:
                 room = Room(votes_to_skip=votes_to_skip, guest_can_pause=guest_can_pause, host=host)
                 self.request.session['room_code'] = room.code
-                print(room.code)
-                print(guest_can_pause)
-                print(votes_to_skip)
                 room.save()
             return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
 
