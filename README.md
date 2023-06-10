@@ -1,4 +1,9 @@
-# ![WebApp](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobilee.gif)
+## Screenshots
+
+![App Screenshot](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobile%20(5).png)
+![App Screenshot](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobile%20(6).png)
+![App Screenshot](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobile%20(8).png)
+
 # JamConnect
 
 A web application for music lovers to play and jam to spotify music together.
@@ -16,11 +21,6 @@ Guests therefore are able to vote to pause, skip, or play a song.
 ## Demo
 
 Here is a live demo of the applications
-
-## Screenshots
-
-![App Screenshot](https://github.com/ListowelAdolwin/JamConnect/blob/master/download.png)
-
 
 ## Tech Stack
 
