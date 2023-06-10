@@ -1,4 +1,4 @@
-# ![WebApp](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobile.gif)
+# ![WebApp](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobilee.gif)
 # JamConnect
 
 A web application for music lovers to play and jam to spotify music together.
