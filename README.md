@@ -1,6 +1,5 @@
 ## Screenshots
 
-![App Screenshot](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobile%20(4).png)
 ![App Screenshot](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobile%20(5).png)
 ![App Screenshot](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobile%20(6).png)
 ![App Screenshot](https://github.com/ListowelAdolwin/JamConnect/blob/master/mobile%20(8).png)
