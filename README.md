@@ -24,7 +24,7 @@ Here is a live demo of the applications
 
 ## Tech Stack
 
-**Client:** React, Bootstrap, 
+**Client:** React, Bootstrap,
 
 **Server:** Django, Spotify API
 
