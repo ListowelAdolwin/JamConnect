@@ -19,7 +19,7 @@ Here is a live demo of the applications
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/ListowelAdolwin/JamConnect/blob/master/download.png)
 
 
 ## Tech Stack
