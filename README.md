@@ -18,10 +18,6 @@ Guests therefore are able to vote to pause, skip, or play a song.
 - [@ListowelAdolwn](https://www.github.com/ListowelAdolwin)
 
 
-## Demo
-
-Here is a live demo of the applications
-
 ## Tech Stack
 
 **Client:** React, Bootstrap,
